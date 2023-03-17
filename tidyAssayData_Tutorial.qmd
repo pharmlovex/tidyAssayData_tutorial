@@ -1,0 +1,127 @@
+---
+title: "tidyAssayData Tutorial"
+author: "Ifedayo Ojo"
+format: html
+---
+
+## Background
+
+Following the extraction of gene expression count data for either DNA microarray or RNA sequence analysis from the database or as an output of the NGS pipeline, it is required to perform a transformation task that enables us to have clean column names that represent the samples of the study. The count data usually present with the sample identified that is stacked with some other information that will not be required in the analysis. Therefore we are continuously faced with the daunting task of transforming the column name to a tidy one.
+
+## The tidyAssayData Package
+
+With the aim to make the transformation of the count data column names easy, I present `transformMatrixcol()` function from the TidyAssayData package. This function will be useful in the transformation phase of a typical gene expression count data ETL pipeline.
+
+## Installation
+
+You can install the tidyAssayData package using `devtools`.
+
+```{r}
+#| label: load-pkgs
+#| code-summary: "Packages"
+#| message: false
+
+library(devtools)
+devtools::install_github("pharmlovex/tidyAssayData")
+```
+
+## Import example count data
+
+To demonstrate how the `transformMatrixCol()` function works, I am going to import count data from gotten from different studies available on the NCBI GEO database.
+
+
+### Import data
+load RNA sequence data obtained from NGS pipeline for processing of raw data. 
+
+```{r}
+#| echo: fenced
+#| warning: false
+# Load library
+library(tidyAssayData)
+library(dplyr)
+
+# Load count data
+df <- read.delim("https://raw.githubusercontent.com/biodata-machine/tidyAssayData/main/counts.txt", 
+                 sep = "", header = TRUE, row.names = 1, comment.char = "#", dec = ".")
+
+# Remove first 5 columns as it is not required for the analysis 
+df = df %>% 
+     select(-c(1:5))
+
+head(df,5)
+```
+
+### Transform the column names
+
+Before applying the function, let's quickly consider the augments of the function.
+
+-   exprMat: count data frame (as a data frame)
+
+-   Sep: delimiter between the sample identifier and appendages
+
+-   nSep: count of the Delimiter
+
+-   pos: position (index) of the sample identifier
+
+Now lets apply the function
+
+```{r}
+transform_df = transformMatrixCol(expMat = df,
+                                  Sep = ".",
+                                  nSep = 2,
+                                  pos = 2)
+
+head(transform_df,5)
+```
+
+## Let's try another count data 
+
+### Import data
+Load a DNA microarray count data from a study in NCBI GEO database with accession number GSE158643   
+
+```{r}
+urls = "https://raw.githubusercontent.com/pharmlovex/ETLPipeline-DNAmicroarray/main/GSE158643_expr.csv"
+df <- read.delim(urls, header = TRUE, sep = ",",
+                row.names = 1)
+
+head(df,5)
+
+```
+
+### Apply function 
+
+```{r}
+df_transform <- transformMatrixCol(expMat = df,
+                                   Sep = "_",
+                                   nSep = 6,
+                                   pos = 1)
+
+head(df_transform)
+```
+## Finally the third demostration of application of the function 
+
+### Import data 
+Load a DNA micro array count data of a study with accession number GSE55945
+
+```{r}
+urls = "https://raw.githubusercontent.com/pharmlovex/ETLPipeline-DNAmicroarray/main/GSE55945_expr.csv"
+df <- read.delim(urls, header = TRUE, sep = ",",
+                row.names = 1)
+
+head(df,5)
+```
+### Apply function to transform the column name 
+
+```{r}
+df_transform <- transformMatrixCol(expMat = df,
+                                   Sep = "_",
+                                   nSep = 6,
+                                   pos = 1)
+
+head(df_transform)
+```
+
+## Conclusion 
+
+tidyAssayData package provides a `transformMatrixCol()` function that allow easy 
+way to tidy up the column names of count data. Therefore it will be worth adding to your expression gene analysis toolkit.  
