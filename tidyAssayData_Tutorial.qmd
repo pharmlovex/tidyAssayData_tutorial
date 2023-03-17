@@ -77,7 +77,7 @@ head(transform_df,5)
 ## Let's try another count data 
 
 ### Import data
-Load a DNA microarray count data from a study in NCBI GEO database with accession number GSE158643   
+Load DNA microarray count data from a study in NCBI GEO database with accession number GSE158643   
 
 ```{r}
 urls = "https://raw.githubusercontent.com/pharmlovex/ETLPipeline-DNAmicroarray/main/GSE158643_expr.csv"
@@ -101,7 +101,7 @@ head(df_transform)
 ## Finally the third demostration of application of the function 
 
 ### Import data 
-Load a DNA micro array count data of a study with accession number GSE55945
+Load DNA microarray count data from a study with accession number GSE55945 available on NCBI GEO database.
 
 ```{r}
 urls = "https://raw.githubusercontent.com/pharmlovex/ETLPipeline-DNAmicroarray/main/GSE55945_expr.csv"
@@ -124,4 +124,4 @@ head(df_transform)
 ## Conclusion 
 
 tidyAssayData package provides a `transformMatrixCol()` function that allow easy 
-way to tidy up the column names of count data. Therefore it will be worth adding to your expression gene analysis toolkit.  
+way to tidy up the column names of count data. Therefore it will be worth adding to your gene expression analysis toolkit.  
